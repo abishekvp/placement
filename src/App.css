@@ -1,38 +1,73 @@
-.App {
+.sidenavbar{
+  position: fixed;
+  margin: 2%;
+  width: 15%;
+}
+.sidenavbar h2{
   text-align: center;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.sidenav{
+  display: grid;
+  width: 100%;
+  margin: 1% 0%;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.sidenav button{
+  width: 100%;
+  font-size: 20px;
+  padding: 10px;
+  background-color: rgba(41, 120, 255, 0.642);
+  color: white;
+  border-radius: 5px;
+  margin: 5% 0;
+  text-align: left;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.sidenav button:hover{
+  background-color: rgba(41, 120, 255, 0.842);
+}
+.topnav{
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10%;
+}
+.container{
+  margin: 0 20%;
+  text-align: center;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
-
-.App-link {
-  color: #61dafb;
+.container form{
+  text-align: left;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.container nav{
+  width: 80%;
+  display: flex;
+  justify-content: space-around;
+}
+.upcomingevents{
+  text-align: left;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.upcomingevents .events_{
+  padding: 10px 10px;
+  margin: 10px;
+  border-radius: 10px;
+  min-width: 25%;
+  max-width: max-content;
+  background-color: rgba(41, 120, 255, 0.642);
+}
+.upcomingevents .events_ p{
+  line-height: 100%;
+  margin: 3% 0;
+}
+.upcomingevents .events_ button{
+  border-radius: 5px;
+}
+form{
+  margin: 10% auto;
+  vertical-align: middle;
+  display: grid;
+  width: fit-content;
 }
