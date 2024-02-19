@@ -1,13 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './navbar';
 import Studentsnav from './studentsnav';
-
-
+import { firebaseApp } from '../../firebase';
 const Higherstudies = () => {
-  const students = [
-    { name: 'John Doe', rollNumber: '123', batch: '2022', degree: 'B.Tech', branch: 'Computer Science', phone: '1234567890', email: 'john.doe@example.com' },
-    { name: 'Jane Smith', rollNumber: '456', batch: '2022', degree: 'B.Tech', branch: 'Electrical Engineering', phone: '9876543210', email: 'jane.smith@example.com' },
-  ];
+  const [higherStudiesStudents, setHigherStudiesStudents] = useState([]);
+
+  useEffect(() => {
+    // Function to fetch data from Firestore
+    const fetchData = async () => {
+      try {
+        const studentRef = firebaseApp.firestore().collection('Student');
+
+        // Query to get students with higherstudies field equal to 'Yes'
+        const querySnapshot = await studentRef.where('higherstudies', '==', 'Yes').get();
+
+        // Extracting data from querySnapshot and updating state
+        const studentsData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setHigherStudiesStudents(studentsData);
+        console.log('studentsData:', studentsData); // For debugging
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    // Fetch data when the component mounts
+    fetchData();
+  }, []); // Empty dependency array ensures this runs only once
 
   return (
     <div>
@@ -29,10 +50,10 @@ const Higherstudies = () => {
             </tr>
           </thead>
           <tbody>
-            {students.map((student, index) => (
-              <tr key={index}>
+            {higherStudiesStudents.map((student) => (
+              <tr key={student.id}>
                 <td>{student.name}</td>
-                <td>{student.rollNumber}</td>
+                <td>{student.rollnumber}</td>
                 <td>{student.batch}</td>
                 <td>{student.degree}</td>
                 <td>{student.branch}</td>
@@ -46,6 +67,5 @@ const Higherstudies = () => {
     </div>
   );
 };
-
 
 export default Higherstudies;

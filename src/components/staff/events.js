@@ -1,30 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './navbar';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { firebaseApp } from '../../firebase'; // Import your Firebase configuration
 
 function Events() {
-  const events = [
-    { companyName: 'Tata Consultancy Services', degree: 'BE', batch: '2020', branch: 'CSE', role: 'Web Developer', date: '20-02-2023', category:'Super Dream' },
-    { companyName: 'Infocys Private Limited', degree: 'B.Tech', batch: '2020', branch: 'CCE', role: 'Junior Software Trainee', date: '21-02-2023', category:'Dream Offer' },
-    { companyName: 'Tata Consultancy Services', degree: 'BE', batch: '2020', branch: 'CSE', role: 'Web Developer', date: '20-02-2023', category:'Super Dream' },
-    { companyName: 'Infocys Private Limited', degree: 'B.Tech', batch: '2020', branch: 'CCE', role: 'Software Trainee', date: '21-02-2023', category:'Dream Offer' },
-    { companyName: 'Tata Consultancy Services', degree: 'BE', batch: '2020', branch: 'CSE', role: 'Web Developer', date: '20-02-2023', category:'Super Dream' },
-  ];
-  const [setEvents] = useState([]);
+  const [events, setEvents] = useState([]);
+  const navigate = useNavigate();
+
   useEffect(() => {
     fetchEvents();
   }, []);
 
   const fetchEvents = async () => {
     try {
-      const response = await fetch('/staff/api/events'); // Replace '/api/events' with your actual API endpoint
-      const data = await response.json();
-      setEvents(data);
+      const eventsCollection = firebaseApp.firestore().collection('Events');
+      const snapshot = await eventsCollection.get();
+      const eventData = snapshot.docs.map(doc => doc.data());
+      setEvents(eventData);
+      console.log('eventData:', eventData); // For debugging
     } catch (error) {
       console.error('Error fetching events:', error);
     }
   };
-
+ 
   return (
     <div>
       <Navbar />
@@ -33,17 +32,17 @@ function Events() {
         <Link to="/staff/addevent">
           <button>Add Event</button>
         </Link>
-        <br/><br/>
+        <br /><br />
         <div className='upcomingevents'>
           {events.map((event, index) => (
             <div key={index} className='events_'>
-              <p>{event.companyName}</p>
+              <p>{event.companyname}</p>
               <p>{event.role}, {event.category}</p>
               <p>Degree : {event.degree}</p>
               <p>Batch : {event.batch}</p>
               <p>Branch : {event.branch}</p>
               <p>Drive Date: {event.date}</p>
-              <Link to={{ pathname: `/apply/${index}` }}><button>Apply</button></Link>
+              <button onClick={() => navigate(`/apply/${event.companyname}`)}>Apply</button>
             </div>
           ))}
         </div>

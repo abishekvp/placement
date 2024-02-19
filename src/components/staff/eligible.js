@@ -1,20 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from './navbar';
 import Studentsnav from './studentsnav';
-
+import { firebaseApp } from '../../firebase';
 
 const Eligible = () => {
-  const students = [
-    { name: 'John Doe', rollNumber: '123', batch: '2022', degree: 'B.Tech', branch: 'Computer Science', phone: '1234567890', email: 'john.doe@example.com' },
-    { name: 'Jane Smith', rollNumber: '456', batch: '2022', degree: 'B.Tech', branch: 'Electrical Engineering', phone: '9876543210', email: 'jane.smith@example.com' },
-  ];
+  const [eligibleStudents, setEligibleStudents] = useState([]);
+
+  useEffect(() => {
+    // Fetch eligible students from Firestore
+    const fetchEligibleStudents = async () => {
+      try {
+        const querySnapshot = await firebaseApp.firestore().collection('Student').get();
+        const students = querySnapshot.docs.map(doc => {
+          const studentData = doc.data();
+          // Convert arrearCount to a number
+          const arrearCount = parseFloat(studentData.arrearCount);
+          return { ...studentData, arrearCount };
+        });
+        // Filter students based on the condition
+        const eligibleStudents = students.filter(student => student.arrearCount > 8.5);
+        setEligibleStudents(eligibleStudents);
+      } catch (error) {
+        console.error('Error fetching eligible students:', error);
+      }
+    };
+
+    fetchEligibleStudents();
+  }, []); // Empty dependency array to ensure the effect runs only once
 
   return (
     <div>
       <h1></h1>
-      <Navbar/>
+      <Navbar />
       <div className='container'>
-        <Studentsnav/>
+        <Studentsnav />
         <h2>Eligible Students</h2>
         <table>
           <thead>
@@ -29,10 +48,10 @@ const Eligible = () => {
             </tr>
           </thead>
           <tbody>
-            {students.map((student, index) => (
+            {eligibleStudents.map((student, index) => (
               <tr key={index}>
                 <td>{student.name}</td>
-                <td>{student.rollNumber}</td>
+                <td>{student.rollnumber}</td>
                 <td>{student.batch}</td>
                 <td>{student.degree}</td>
                 <td>{student.branch}</td>
@@ -46,6 +65,5 @@ const Eligible = () => {
     </div>
   );
 };
-
 
 export default Eligible;

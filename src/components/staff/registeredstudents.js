@@ -15,6 +15,14 @@ const Registered = () => {
       <Navbar/>
       <div className='container'>
         <Studentsnav/>
+        <br/>
+        <label>Search Comapny : </label><input list="brow" placeholder='Company name'/>
+        <datalist id="brow">
+          {/* {company.map((company, index) => ( */}
+            <option value="{company.name}"/>
+          {/* // ))} */}
+        </datalist>
+        <br/>
         <h2>Registered Students</h2>
         <table>
           <thead>

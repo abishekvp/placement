@@ -1,20 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from './navbar';
 import Studentsnav from './studentsnav';
-
+import { firebaseApp } from '../../firebase';
 
 const Placed = () => {
-  const students = [
-    { name: 'John Doe', rollNumber: '123', batch: '2022', degree: 'B.Tech', branch: 'Computer Science', phone: '1234567890', email: 'john.doe@example.com' },
-    { name: 'Jane Smith', rollNumber: '456', batch: '2022', degree: 'B.Tech', branch: 'Electrical Engineering', phone: '9876543210', email: 'jane.smith@example.com' },
-  ];
+  const [placedStudents, setPlacedStudents] = useState([]);
+
+  useEffect(() => {
+    // Fetch placed students from Firestore
+    const fetchPlacedStudents = async () => {
+      try {
+        const querySnapshot = await firebaseApp.firestore().collection('Student').where('placed', '==', 'Yes').get();
+        const students = querySnapshot.docs.map(doc => doc.data());
+        setPlacedStudents(students);
+      } catch (error) {
+        console.error('Error fetching placed students:', error);
+      }
+    };
+
+    fetchPlacedStudents();
+  }, []); // Empty dependency array to ensure the effect runs only once
 
   return (
     <div>
       <h1></h1>
-      <Navbar/>
+      <Navbar />
       <div className='container'>
-        <Studentsnav/>
+        <Studentsnav />
         <h2>Placed Students</h2>
         <table>
           <thead>
@@ -29,10 +41,10 @@ const Placed = () => {
             </tr>
           </thead>
           <tbody>
-            {students.map((student, index) => (
+            {placedStudents.map((student, index) => (
               <tr key={index}>
                 <td>{student.name}</td>
-                <td>{student.rollNumber}</td>
+                <td>{student.rollnumber}</td>
                 <td>{student.batch}</td>
                 <td>{student.degree}</td>
                 <td>{student.branch}</td>
@@ -46,6 +58,5 @@ const Placed = () => {
     </div>
   );
 };
-
 
 export default Placed;

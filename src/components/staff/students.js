@@ -1,20 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from './navbar';
 import Studentsnav from './studentsnav';
-
+import { Link } from 'react-router-dom';
+import { firebaseApp } from '../../firebase';
+// import firebase from 'firebase/app';
+// import 'firebase/firestore';
 
 const Students = () => {
-  const students = [
-    { name: 'John Doe', rollNumber: '123', batch: '2022', degree: 'B.Tech', branch: 'Computer Science', phone: '1234567890', email: 'john.doe@example.com' },
-    { name: 'Jane Smith', rollNumber: '456', batch: '2022', degree: 'B.Tech', branch: 'Electrical Engineering', phone: '9876543210', email: 'jane.smith@example.com' },
-  ];
+  const [students, setStudents] = useState([]);
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+      const studentsRef = firebaseApp.firestore().collection('Student');
+      const snapshot = await studentsRef.get();
+      const studentsData = snapshot.docs.map((doc) => doc.data());
+      setStudents(studentsData);
+    };
+
+    fetchStudents();
+  }, []);
 
   return (
     <div>
-      <h1></h1>
       <Navbar/>
       <div className='container'>
         <Studentsnav/>
+        <br/>
+        <Link to="/staff/addstudent"><button>Add Student</button></Link>
+        <br/>
         <h2>Total Students</h2>
         <table>
           <thead>
@@ -46,6 +59,5 @@ const Students = () => {
     </div>
   );
 };
-
 
 export default Students;
