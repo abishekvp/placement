@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { firebaseApp } from '../../firebase';
-import Navbar from '../Navbar';
+import Navbar from './navbar';
+
 function Profile() {
   const [students, setStudents] = useState([]);
 
@@ -28,7 +29,7 @@ function Profile() {
   
           if (studentDoc.exists) {
               const studentData = studentDoc.data();
-              
+              console.log('Student data:', studentData);
               return studentData;
           } else {
               console.log('Student not found in Firestore.');
@@ -39,39 +40,24 @@ function Profile() {
           return null;
       }
   };
-  
-
     return (
         <div>
             <Navbar/>
-            <h1>Student Profile</h1>
-            <div>
-                <table>
-                    <thead>
-                        <tr>
-                        <th>Name</th>
-                        <th>Roll Number</th>
-                        <th>Batch</th>
-                        <th>Degree</th>
-                        <th>Branch</th>
-                        <th>Phone</th>
-                        <th>Email</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {students.map((student, index) => (
-                        <tr key={index}>
-                            <td>{student.name}</td>
-                            <td>{student.rollNumber}</td>
-                            <td>{student.batch}</td>
-                            <td>{student.degree}</td>
-                            <td>{student.branch}</td>
-                            <td>{student.phone}</td>
-                            <td>{student.email}</td>
-                        </tr>
-                        ))}
-                    </tbody>
-                </table>
+            <div className='container'>
+                <h1>Student Profile</h1>
+                <div className='profile_data'>
+                    {students.map((student, index) => (
+                    <div key={index}>
+                        <p>Name : {student.name}</p>
+                        <p>Roll Number : {student.rollnumber}</p>
+                        <p>Batch : {student.batch}</p>
+                        <p>Degree : {student.degree}</p>
+                        <p>Branch : {student.branch}</p>
+                        <p>Phone : {student.phone}</p>
+                        <p>Email : {student.email}</p>
+                    </div>
+                    ))}
+                </div>
             </div>
         </div>
     );

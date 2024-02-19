@@ -18,7 +18,6 @@ function Events() {
       const snapshot = await eventsCollection.get();
       const eventData = snapshot.docs.map(doc => doc.data());
       setEvents(eventData);
-      console.log('eventData:', eventData); // For debugging
     } catch (error) {
       console.error('Error fetching events:', error);
     }
@@ -42,7 +41,7 @@ function Events() {
               <p>Batch : {event.batch}</p>
               <p>Branch : {event.branch}</p>
               <p>Drive Date: {event.date}</p>
-              <button onClick={() => navigate(`/apply/${event.companyname}`)}>Apply</button>
+              <button onClick={() => navigate(`/apply/${event.companyname}`)}>Delete</button>
             </div>
           ))}
         </div>

@@ -11,6 +11,7 @@ import Students from './components/staff/students';
 import AddStudent from './components/staff/addstudent';
 import Events from './components/staff/events';
 import Addevent from './components/staff/addevent';
+import AllStudents from './components/staff/allstudents';
 import Registeredstudents from './components/staff/registeredstudents';
 import Placed from './components/staff/placed';
 import Eligible from './components/staff/eligible';
@@ -45,7 +46,7 @@ function App() {
           <Route path="/student/events" element={<Events />}></Route>
           <Route path="/student/feedback" element={<StudentFeedback />}></Route>
           <Route path="/student/profile" element={<Profile />}></Route>
-          <Route path="/student/conmpanies" element={<Companies />}></Route>
+          <Route path="/student/companies" element={<Companies />}></Route>
           <Route path="/student/review" element={<Review />}></Route>
 
           <Route path="/staff" element={<Students />}></Route>
@@ -55,6 +56,7 @@ function App() {
           <Route path="/staff/addevent" element={<Addevent />}></Route>
           <Route path="/staff/feedback" element={<StaffFeedback />}></Route>
           <Route path="/staff/addfeedback" element={<StaffFeedback />}></Route>
+          <Route path="/staff/allstudents" element={<AllStudents />}></Route>
           <Route path="/staff/registeredstudents" element={<Registeredstudents />}></Route>
           <Route path="/staff/placedstudents" element={<Placed />}></Route>
           <Route path="/staff/eligiblestudents" element={<Eligible />}></Route>

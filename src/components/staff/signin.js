@@ -11,45 +11,12 @@ function Signin() {
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
-
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
-    };
-
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
     };
 
     const handleUsernameChange = (e) => {
         setUsername(e.target.value);
-    };
-
-    const handleRegister = async (e) => {
-        e.preventDefault();
-
-        try {
-            // Check if the username already exists
-            const usernameExists = await checkUsernameExists(username);
-
-            if (usernameExists) {
-                setErrorMessage('Username already exists. Choose another username.');
-                return;
-            }
-
-            // If username doesn't exist, create a new document in the "Login" collection
-            await firebaseApp.firestore().collection('Login').doc(username).set({
-                username,
-                password,
-            });
-
-            console.log('User registered successfully!');
-            setIsRegistered(true);
-            setShowRegisterForm(false);
-            setErrorMessage('');
-        } catch (error) {
-            console.error('Error registering user:', error);
-            setErrorMessage('Error registering user. Please try again.');
-        }
     };
 
     const handleLogin = async (e) => {
@@ -90,12 +57,18 @@ function Signin() {
     };
 
     return (
-        <div>
-            <form onSubmit={handleLogin}>
-                <h2>StaLogin</h2>
-                <input type="text" placeholder='Username' value={username} onChange={handleUsernameChange} />
-                <input type="password" placeholder='Password' value={password} onChange={handlePasswordChange} />
-                <button type="submit">Login</button>
+        <div className="container">
+            <form className="form" onSubmit={handleLogin}>
+                <h2>Placement Admin Login</h2>
+                <div className="form-group">
+                    <label htmlFor="username">Username</label>
+                    <input type="text" className="form-control" id="username" placeholder="Username" value={username} onChange={handleUsernameChange} />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="password">Password</label>
+                    <input type="password" className="form-control" id="password" placeholder="Password" value={password} onChange={handlePasswordChange} />
+                </div>
+                <button type="submit" className="btn btn-primary">Login</button>
             </form>
         </div>
     );

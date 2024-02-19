@@ -18,7 +18,7 @@ const Eligible = () => {
           return { ...studentData, arrearCount };
         });
         // Filter students based on the condition
-        const eligibleStudents = students.filter(student => student.arrearCount > 8.5);
+        const eligibleStudents = students.filter(student => student.cgpa > 8);
         setEligibleStudents(eligibleStudents);
       } catch (error) {
         console.error('Error fetching eligible students:', error);

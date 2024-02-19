@@ -3,9 +3,9 @@ import Navbar from './navbar';
 
 function Dashboard() {
     return (
-        <div>
+        <section>
             <Navbar/>
-        </div>
+        </section>
     )
 }
 

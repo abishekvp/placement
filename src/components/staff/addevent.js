@@ -36,7 +36,7 @@ function Addevent() {
     };
 
     return (
-        <div>
+        <section>
             <Navbar />
             <div className='container'>
                 <h1>Add Placement Drive</h1>
@@ -72,7 +72,7 @@ function Addevent() {
                     <input type='submit' value="Add Event" />
                 </form>
             </div>
-        </div>
+        </section>
     )
 }
 

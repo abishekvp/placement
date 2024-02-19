@@ -31,6 +31,15 @@ function Feedback() {
       <div className='container'>
         <h1>Feedback</h1>
         <br/><br/>
+        <div>
+          <label>Search Comapny : </label><input list="brow" placeholder='Company name'/>
+          <datalist id="brow">
+            {/* {company.map((company, index) => ( */}
+              <option value="{company.name}"/>
+            {/* // ))} */}
+          </datalist>
+          <button type="submit">Post Feedback</button>
+        </div>
         <div className='upcomingevents'>
           {events.map((event, index) => (
             <div key={index} className='events_'>

@@ -1,86 +1,62 @@
-.sign{
-  position: fixed;
-  display: flex;
-  width: 50%;
-  justify-content: space-around;
-  align-items: center;
-  height: 100vh;
-
-}
-.sign button{
-  min-width: 100%;
-  margin-bottom: 20px;
-}
-.sidenavbar{
-  position: fixed;
-  margin: 2%;
-  width: 15%;
-}
-.sidenavbar h2{
-  text-align: center;
-}
-.sidenav{
-  display: grid;
-  width: 100%;
-  margin: 1% 0%;
-}
-.sidenav button{
-  width: 100%;
-  font-size: 20px;
-  padding: 10px;
-  background-color: rgba(41, 120, 255, 0.642);
-  color: white;
-  border-radius: 5px;
-  margin: 5% 0;
-  text-align: left;
-}
-.sidenav button:hover{
-  background-color: rgba(41, 120, 255, 0.842);
+body{
+  background-color: snow;
 }
 .topnav{
+  z-index: 1;
+  position: fixed;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 10%;
+  top: 0;
+  width: 100%;
+  padding-left: 4%;
+  background-color: rgba(141, 210, 221, 0.4);
 }
-.container{
-  margin: 0 20%;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
+.topnav div{
+  position: fixed;
+  display: flex;
+  right: 5%;
 }
-.container form{
+.sidenav{
+  z-index: 0;
+  position: fixed;
+  display: grid;
+  top: 0;
+  left: 0;
+  padding-bottom: 40vh;
+  padding: 10% 1%;
+  width: 10%;
+  background-color: rgba(141, 210, 221, 0.4);
+}
+.sidenav button{
+  font-size: 18px;
+  padding: 10px 20px;
+  width: 100%;
+  font-weight: 700;
+  background-color: #8DD2DD;
+  border: 1px solid white;
   text-align: left;
-}
-.container nav{
-  width: 80%;
-  display: flex;
-  justify-content: space-around;
-}
-.upcomingevents{
-  text-align: left;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.upcomingevents .events_{
-  padding: 10px 10px;
-  margin: 10px;
-  border-radius: 10px;
-  min-width: 25%;
-  max-width: max-content;
-  background-color: rgba(41, 120, 255, 0.642);
-}
-.upcomingevents .events_ p{
-  line-height: 100%;
-  margin: 3% 0;
-}
-.upcomingevents .events_ button{
   border-radius: 5px;
 }
-form{
-  margin: 10% auto;
-  vertical-align: middle;
-  display: grid;
-  width: fit-content;
+.sidenav button:hover{
+  background-color: #2fadc6;
+}
+.studentnav{
+  z-index: 0;
+  display: flex;
+  top: 0;
+  left: 0;
+  padding-bottom: 40vh;
+  width: 100%;
+}
+.studentnav button{
+  font-size: 17px;
+  padding: 10px 20px;
+  width: 100%;
+  font-weight: 700;
+  background-color: #8DD2DD;
+  border: 1px solid white;
+  text-align: left;
+  border-radius: 5px;
+}
+.container{
+  margin: 10% 15%;
 }

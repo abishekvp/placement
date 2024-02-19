@@ -1,10 +1,51 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import { firebaseApp } from '../../firebase';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
+
 function Dashboard() {
+    const [students, setStudents] = useState([]);
+
+    useEffect(() => {
+        const storedRollnumber = localStorage.getItem('rollnumber');
+        console.log('Stored Rollnumber:', storedRollnumber);
+        if (storedRollnumber) {
+            fetchStudentProfile(storedRollnumber);
+        }
+    }, []);
+
+    const fetchStudentProfile = async (rollnumber) => {
+        try {
+            const studentData = await getStudentData(rollnumber);
+            setStudents([studentData]);
+            console.log('Student Profile:', studentData);
+        } catch (error) {
+            console.error('Error fetching student profile:', error);
+        }
+    };
+
+    const getStudentData = async (rollnumber) => {
+      try {
+          const studentDoc = await firebaseApp.firestore().collection('Student').doc(rollnumber).get();
+  
+          if (studentDoc.exists) {
+              const studentData = studentDoc.data();
+              console.log('Student data:', studentData);
+              return studentData;
+          } else {
+              console.log('Student not found in Firestore.');
+              return null;
+          }
+      } catch (error) {
+          console.error('Error fetching student data from Firestore:', error);
+          return null;
+      }
+    };
     return (
         <div className='sidenavbar'>
-            <h2>Username</h2>
+            {students.map((student, index) => (
+                <h2>{student.name}</h2>
+            ))}
             <div className="sidenav">
                 <Link to="/student/profile"><button>Profile</button></Link>
                 <Link to="/student/companies"><button>Companies</button></Link>

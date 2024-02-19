@@ -96,7 +96,7 @@ function AddStudent() {
     };
 
     return (
-        <div>
+        <section>
             <Navbar/>
             <div className='container'>
                 <h1>Add Student</h1>
@@ -175,7 +175,7 @@ function AddStudent() {
                     <input type='submit' value="Submit" />
                 </form>
             </div>
-        </div>
+        </section>
     )
 }
 
