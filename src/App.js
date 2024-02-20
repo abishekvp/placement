@@ -18,6 +18,8 @@ import Eligible from './components/staff/eligible';
 import Higherstudies from './components/staff/higherstudies';
 import StaffFeedback from './components/staff/feedback';
 import AddFeedback from './components/staff/feedback';
+import FeedbackForm from './components/student/feedbackform';
+import ViewResponse from './components/staff/viewresponse';
 
 import Profile from './components/student/profile';
 import Companies from './components/student/companies';
@@ -38,6 +40,8 @@ function App() {
           {/* {user.role === "teacher" && (
             <Route exact path="/only-teacher" component={OnlyTeacher} />
           )} */}
+            <Route path="/student/:companyname/:index/fillout" element={<FeedbackForm />} />
+            <Route path="/staff/view/:companyname" element={<ViewResponse />} />
           <Route path="/staff/signin" element={<StaffSignin />}></Route>
           <Route path="/student/signin" element={<StudentSignin />}></Route>
           <Route path="/signout" element={<Signout />}></Route>
@@ -48,6 +52,7 @@ function App() {
           <Route path="/student/profile" element={<Profile />}></Route>
           <Route path="/student/companies" element={<Companies />}></Route>
           <Route path="/student/review" element={<Review />}></Route>
+         
 
           <Route path="/staff" element={<Students />}></Route>
           <Route path="/staff/students" element={<Students />}></Route>

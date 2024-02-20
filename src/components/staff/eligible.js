@@ -5,6 +5,7 @@ import { firebaseApp } from '../../firebase';
 
 const Eligible = () => {
   const [eligibleStudents, setEligibleStudents] = useState([]);
+  const [cgpaFilter, setCgpaFilter] = useState('');
 
   useEffect(() => {
     // Fetch eligible students from Firestore
@@ -13,20 +14,34 @@ const Eligible = () => {
         const querySnapshot = await firebaseApp.firestore().collection('Student').get();
         const students = querySnapshot.docs.map(doc => {
           const studentData = doc.data();
-          // Convert arrearCount to a number
+          // Convert arrearCount and cgpa to numbers
           const arrearCount = parseFloat(studentData.arrearCount);
-          return { ...studentData, arrearCount };
+          const cgpa = parseFloat(studentData.cgpa);
+          return { ...studentData, arrearCount, cgpa };
         });
+
         // Filter students based on the condition
-        const eligibleStudents = students.filter(student => student.cgpa > 8);
-        setEligibleStudents(eligibleStudents);
+        let filteredStudents = students.filter(student => student.cgpa > 8);
+
+        // Apply additional filter based on CGPA input
+        if (cgpaFilter !== '') {
+          const cgpaFilterValue = parseFloat(cgpaFilter);
+          filteredStudents = filteredStudents.filter(student => student.cgpa > cgpaFilterValue);
+        }
+
+        setEligibleStudents(filteredStudents);
       } catch (error) {
         console.error('Error fetching eligible students:', error);
       }
     };
 
     fetchEligibleStudents();
-  }, []); // Empty dependency array to ensure the effect runs only once
+  }, [cgpaFilter]); // Include cgpaFilter in the dependency array to update when the filter changes
+
+  const handleCgpaChange = (e) => {
+    // Update the CGPA filter when the input changes
+    setCgpaFilter(e.target.value);
+  };
 
   return (
     <div>
@@ -35,6 +50,9 @@ const Eligible = () => {
       <div className='container'>
         <Studentsnav />
         <h2>Eligible Students</h2>
+        <label>Filter by CGPA: </label>
+      
+        <input type='number' step='0.01' max='10' value={cgpaFilter} onChange={handleCgpaChange} />
         <table>
           <thead>
             <tr>

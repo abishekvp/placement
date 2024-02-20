@@ -1,27 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './navbar';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { firebaseApp, db } from '../../firebase';
 
 function Feedback() {
-  const events = [
-    { companyName: 'Tata Consultancy Services', degree: 'BE', batch: '2020', branch: 'CSE', role: 'Web Developer', date: '20-02-2023', category:'Super Dream' },
-    { companyName: 'Infocys Private Limited', degree: 'B.Tech', batch: '2020', branch: 'CCE', role: 'Junior Software Trainee', date: '21-02-2023', category:'Dream Offer' },
-    { companyName: 'Tata Consultancy Services', degree: 'BE', batch: '2020', branch: 'CSE', role: 'Web Developer', date: '20-02-2023', category:'Super Dream' },
-    { companyName: 'Infocys Private Limited', degree: 'B.Tech', batch: '2020', branch: 'CCE', role: 'Software Trainee', date: '21-02-2023', category:'Dream Offer' },
-    { companyName: 'Tata Consultancy Services', degree: 'BE', batch: '2020', branch: 'CSE', role: 'Web Developer', date: '20-02-2023', category:'Super Dream' },
-  ];
-  const [setEvents] = useState([]);
+  const [feedbackData, setFeedbackData] = useState([]);
+  const [registeredCompanies, setRegisteredCompanies] = useState([]);
+
   useEffect(() => {
-    fetchEvents();
+    const rollnumber = localStorage.getItem('rollnumber');
+    if (rollnumber) {
+      fetchRegisteredCompanies(rollnumber);
+    }
   }, []);
 
-  const fetchEvents = async () => {
+  const fetchRegisteredCompanies = async (rollnumber) => {
     try {
-      const response = await fetch('/staff/api/events'); // Replace '/api/events' with your actual API endpoint
-      const data = await response.json();
-      setEvents(data);
+      const studentDoc = await db.collection('Student').doc(rollnumber).get();
+      const studentData = studentDoc.exists ? studentDoc.data() : null;
+
+      if (studentData && studentData.registered) {
+        setRegisteredCompanies(studentData.registered);
+        fetchFeedback(studentData.registered);
+      }
     } catch (error) {
-      console.error('Error fetching events:', error);
+      console.error('Error fetching registered companies:', error);
+    }
+  };
+
+  const fetchFeedback = async (registeredCompanies) => {
+    try {
+      const feedbackPromises = registeredCompanies.map(async (companyname) => {
+        const feedbackDoc = await db.collection('Feedback').doc(companyname).get();
+        return feedbackDoc.exists ? feedbackDoc.data() : null;
+      });
+
+      const feedbackResults = await Promise.all(feedbackPromises);
+      setFeedbackData(feedbackResults.filter(data => data !== null));
+      console.log('Feedback:', feedbackResults);
+    } catch (error) {
+      console.error('Error fetching feedback:', error);
     }
   };
 
@@ -30,18 +48,20 @@ function Feedback() {
       <Navbar />
       <div className='container'>
         <h1>Feedback</h1>
-        <br/><br/>
+        <br /><br />
         <div className='upcomingevents'>
-          {events.map((event, index) => (
+          {feedbackData.map((feedback, index) => (
             <div key={index} className='events_'>
-              <p>{event.companyName}</p>
-              <p>{event.role}, {event.category}</p>
-              <p>Degree : {event.degree}</p>
-              <p>Batch : {event.batch}</p>
-              <p>Branch : {event.branch}</p>
-              <p>Drive Date: {event.date}</p>
-              
-              <Link to={{ pathname: `/apply/${index}` }}><button>Fill Out</button></Link>
+              <p>{feedback.companyname}</p>
+              <p>{feedback.role}, {feedback.category}</p>
+              <p>Degree : {feedback.degree}</p>
+              <p>Batch : {feedback.batch}</p>
+              <p>Branch : {feedback.branch}</p>
+              <p>Drive Date: {feedback.date}</p>
+              <Link to={{ pathname: `/student/${feedback.companyname}/${index}/fillout` }}>
+                <button>Fill Out</button>
+              </Link>
+
             </div>
           ))}
         </div>

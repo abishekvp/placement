@@ -4,9 +4,6 @@ import Studentsnav from './studentsnav';
 import { Link } from 'react-router-dom';
 import { firebaseApp } from '../../firebase';
 
-// import firebase from 'firebase/app';
-// import 'firebase/firestore';
-
 const Students = () => {
   const [students, setStudents] = useState([]);
 
