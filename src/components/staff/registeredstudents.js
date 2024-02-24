@@ -57,6 +57,9 @@ const Registered = () => {
       <Navbar />
       <div className='container'>
         <Studentsnav />
+
+        <br />
+        <h2>Registered Students</h2>
         <label>Filter by Company : </label>
         <select value={selectedCompany} onChange={handleCompanyChange}>
           <option value="" disabled>Select a company</option>
@@ -64,8 +67,6 @@ const Registered = () => {
             <option key={index} value={company}>{company}</option>
           ))}
         </select>
-        <br />
-        <h2>Registered Students</h2>
         <table>
           <thead>
             <tr>

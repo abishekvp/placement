@@ -26,32 +26,43 @@ function Companies() {
     try {
       // Get the rollnumber from local storage
       const rollnumber = localStorage.getItem('rollnumber');
-
+  
       // Update the Student collection with the applied company
       const studentRef = db.collection('Student').doc(rollnumber);
-
+  
       // Use a transaction to ensure data consistency
       await db.runTransaction(async (transaction) => {
         const studentData = await transaction.get(studentRef);
-
+  
         // Check if 'registered' field exists and initialize if it doesn't
         const registeredCompanies = studentData.data()?.registered || [];
-        registeredCompanies.push(companyName);
-
-        transaction.update(studentRef, { registered: registeredCompanies });
+  
+        // Check if the company is already in the 'registered' array
+        if (!registeredCompanies.includes(companyName)) {
+          // If not, add the company to the array
+          registeredCompanies.push(companyName);
+  
+          // Update the 'registered' field in the Firestore document
+          transaction.update(studentRef, { registered: registeredCompanies });
+  
+          alert('Successfully applied for ' + companyName);
+          console.log(`Successfully applied for ${companyName}`);
+        } else {
+          // If the company is already in the array, show a message
+          alert(`You have already applied for ${companyName}`);
+        }
       });
-
-      console.log(`Successfully applied for ${companyName}`);
     } catch (error) {
       console.error('Error applying for company:', error);
     }
   };
+  
 
   return (
     <div>
       <Navbar />
       <div className='container'>
-        <h1>Upcoming Events</h1>
+        <h1>Companies</h1>
         <br /><br />
         <div className='upcomingevents'>
           {events.map((event, index) => (

@@ -1,6 +1,7 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
+
 import Signout from './components/sign/signout';
 
 import Sign from './components/sign';
@@ -27,32 +28,19 @@ import StudentFeedback from './components/student/feedback';
 import Review from './components/student/review';
 
 function App() {
-  function auth(){
-    if(window.localStorage.getItem('loggedin')){
-    }else{
-      window.location.href="/"
-    } 
-  }
+ 
   return (
     <Router>
       <Routes>
           <Route exact path="/" element={<Sign />}></Route>
-          {/* {user.role === "teacher" && (
-            <Route exact path="/only-teacher" component={OnlyTeacher} />
-          )} */}
-            <Route path="/student/:companyname/:index/fillout" element={<FeedbackForm />} />
-            <Route path="/staff/view/:companyname" element={<ViewResponse />} />
+           
+           
+           
+         
+
           <Route path="/staff/signin" element={<StaffSignin />}></Route>
           <Route path="/student/signin" element={<StudentSignin />}></Route>
           <Route path="/signout" element={<Signout />}></Route>
-
-          <Route path="/student" element={<Profile />}></Route>
-          <Route path="/student/events" element={<Events />}></Route>
-          <Route path="/student/feedback" element={<StudentFeedback />}></Route>
-          <Route path="/student/profile" element={<Profile />}></Route>
-          <Route path="/student/companies" element={<Companies />}></Route>
-          <Route path="/student/review" element={<Review />}></Route>
-         
 
           <Route path="/staff" element={<Students />}></Route>
           <Route path="/staff/students" element={<Students />}></Route>
@@ -66,6 +54,19 @@ function App() {
           <Route path="/staff/placedstudents" element={<Placed />}></Route>
           <Route path="/staff/eligiblestudents" element={<Eligible />}></Route>
           <Route path="/staff/higherstudies" element={<Higherstudies />}></Route>
+          <Route path="/staff/view/:companyname" element={<ViewResponse />} />
+
+          <Route path="/student" element={<Profile />}></Route>
+          <Route path="/student/events" element={<Events />}></Route>
+          <Route path="/student/feedback" element={<StudentFeedback />}></Route>
+          <Route path="/student/profile" element={<Profile />}></Route>
+          <Route path="/student/companies" element={<Companies />}></Route>
+          <Route path="/student/review" element={<Review />}></Route>
+          <Route path="/student/:companyname/:index/fillout" element={<FeedbackForm />} />
+          <Route path="/student/view/:companyname" element={<ViewResponse />} />
+         
+
+         
       </Routes>
     </Router>
   );

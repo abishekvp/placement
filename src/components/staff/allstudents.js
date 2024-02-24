@@ -26,8 +26,9 @@ const AllStudents = () => {
       <Navbar/>
       <div className='container'>
         <Studentsnav/>
-        <Link to="/staff/addstudent"><button>Add Student</button></Link>
+       
         <h2>Total Students</h2>
+        <Link to="/staff/addstudent"><button>Add Student</button></Link>
         <table>
           <thead>
             <tr>

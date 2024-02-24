@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { firebaseApp } from '../../firebase';
 import Navbar from './navbar';
+import { useNavigate } from 'react-router-dom';
 
 function AddStudent() {
     const [formData, setFormData] = useState({
@@ -15,13 +16,14 @@ function AddStudent() {
         phone: '',
         degree: '',
         placed: '',
-        registered: '',
+        registered: [],
         resume: '',
         higherstudies: '',
         resumeFile: null,
         resumeDownloadLink: '',
         arrearCount: '',
     });
+    const navigate = useNavigate();
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         setFormData({
@@ -62,7 +64,7 @@ function AddStudent() {
             if (resumeDownloadLink) {
                 const rollNumber = formData.rollnumber;
                 const studentRef = firebaseApp.firestore().collection('Student').doc(rollNumber);
-    
+                const registeredArray = formData.registered.split(',').map((company) => company.trim());
                 // Upload data to Firestore
                 await studentRef.set({
                     name: formData.name,
@@ -76,11 +78,13 @@ function AddStudent() {
                     phone: formData.phone,
                     degree: formData.degree,
                     placed: formData.placed,
-                    registered: formData.registered,
+                    registered: registeredArray,
                     resume: resumeDownloadLink,
                     higherstudies: formData.higherstudies,
                     arrearCount: formData.arrearCount,
                 });
+                alert('Student added successfully!');
+                navigate('/staff/students');
                 console.log('Data uploaded successfully!');
             } else {
                 console.error('Error uploading resume file.');
@@ -103,55 +107,65 @@ function AddStudent() {
                 <form onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor="name">Student Name : </label>
-                        <input type='text' id='name' name='name' placeholder='Name' onChange={handleChange} value={formData.name} />
+                        <input type='text' className= "inputBox" id='name' name='name' placeholder='Name' onChange={handleChange} value={formData.name} required />
                     </div>
                     <div>
                         <label htmlFor="rollnumber">Roll Number : </label>
-                        <input type='text' id='rollnumber' name='rollnumber' placeholder='Roll Number' onChange={handleChange} value={formData.rollnumber} />
+                        <input type='text' className= "inputBox" id='rollnumber' name='rollnumber' placeholder='Roll Number' onChange={handleChange} value={formData.rollnumber} required />
                     </div>
                     <div>
                         <label htmlFor="email">Email : </label>
-                        <input type='email' id='email' name='email' placeholder='Email' onChange={handleChange} value={formData.email} />
+                        <input type='email' className= "inputBox" id='email' name='email' placeholder='Email' onChange={handleChange} value={formData.email} required />
                     </div>
                     <div>
                         <label htmlFor="fathername">Father's Name : </label>
-                        <input type='text' id='fathername' name='fathername' placeholder="Father's Name" onChange={handleChange} value={formData.fathername} />
+                        <input type='text' className= "inputBox" id='fathername' name='fathername' placeholder="Father's Name" onChange={handleChange} value={formData.fathername} required />
                     </div>
                     <div>
                         <label htmlFor="dob">Date of Birth : </label>
-                        <input type='date' id='dob' name='dob' onChange={handleChange} value={formData.dob} />
+                        <input type='date'  className= "inputBox" id='dob' name='dob' onChange={handleChange} value={formData.dob} required />
                     </div>
                     <div>
                         <label htmlFor="batch">Batch : </label>
-                        <input type='text' id='batch' name='batch' placeholder='Batch' onChange={handleChange} value={formData.batch} />
+                        <input type='text' className= "inputBox" id='batch' name='batch' placeholder='Batch' onChange={handleChange} value={formData.batch} required />
                     </div>
                     <div>
                         <label htmlFor="branch">Branch : </label>
-                        <input type='text' id='branch' name='branch' placeholder='Branch' onChange={handleChange} value={formData.branch} />
+                        <input type='text' className= "inputBox" id='branch' name='branch' placeholder='Branch' onChange={handleChange} value={formData.branch} required />
                     </div>
                     <div>
                         <label htmlFor="cgpa">CGPA : </label>
-                        <input type='text' id='cgpa' name='cgpa' placeholder='CGPA' onChange={handleChange} value={formData.cgpa} />
+                        <input type='text' className= "inputBox" id='cgpa' name='cgpa' placeholder='CGPA' onChange={handleChange} value={formData.cgpa} required />
                     </div>
                     <div>
                         <label htmlFor="arrearCount">Arrear Count : </label>
-                        <input type='text' id='arrearCount' name='arrearCount' placeholder='Arrear Count' onChange={handleChange} value={formData.arrearCount} />
+                        <input type='text' className= "inputBox" id='arrearCount' name='arrearCount' placeholder='Arrear Count' onChange={handleChange} value={formData.arrearCount} required/>
                     </div>
                     <div>
                         <label htmlFor="phone">Phone : </label>
-                        <input type='tel' id='phone' name='phone' placeholder='Phone' onChange={handleChange} value={formData.phone} />
+                        <input type='tel' className= "inputBox" id='phone' name='phone' placeholder='Phone' onChange={handleChange} value={formData.phone} />
                     </div>
                     <div>
                         <label htmlFor="degree">Degree : </label>
-                        <input type='text' id='degree' name='degree' placeholder='Degree' onChange={handleChange} value={formData.degree} />
+                        <input type='text' className= "inputBox" id='degree' name='degree' placeholder='Degree' onChange={handleChange} value={formData.degree} required/>
                     </div>
                     <div>
-                        <label htmlFor="registered">Registered : </label>
-                        <input type='text' id='registered' name='registered' placeholder='Registered' onChange={handleChange} value={formData.registered} />
+                        <label htmlFor="registered">Registered Companies: </label>
+                        <input
+                        style={{width: '50%'}}
+                            type='text'
+                            id='registered'
+                            name='registered'
+                            placeholder='Separate multiple companies with commas (e.g., Company1, Company2).'
+                            onChange={handleChange}
+                            value={formData.registered}
+                            className= "inputBox"
+                        />
+                    
                     </div>
                     <div>
                         <label htmlFor="higherstudies">Higher Studies: </label>
-                        <select id="higherstudies" name="higherstudies" onChange={handleChange} value={formData.higherstudies}>
+                        <select className= "inputBox" id="higherstudies" name="higherstudies" onChange={handleChange} value={formData.higherstudies} required>
                             <option value="">Select Option</option>
                             <option value="Yes">Yes</option>
                             <option value="No">No</option>
@@ -159,7 +173,7 @@ function AddStudent() {
                     </div>
                     <div>
                         <label htmlFor="placed">Placed: </label>
-                        <select id="placed" name="placed" onChange={handleChange} value={formData.placed}>
+                        <select id="placed" className= "inputBox" name="placed" onChange={handleChange} value={formData.placed} required>
                             <option value="">Select Option</option>
                             <option value="Yes">Yes</option>
                             <option value="No">No</option>
@@ -167,7 +181,7 @@ function AddStudent() {
                     </div>
                     <div>
                         <label htmlFor="resume">Resume : </label>
-                        <input type='file' id='resume' name='resume' onChange={handleFileChange} />
+                        <input type='file' id='resume' name='resume' onChange={handleFileChange} required/>
                     </div>
                     <button type="button" onClick={handleFileUpload}>
                         Upload Resume

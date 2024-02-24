@@ -3,11 +3,8 @@ import { firebaseApp } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 
 function Signin() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
-    const [isRegistered, setIsRegistered] = useState(false);
-    const [showRegisterForm, setShowRegisterForm] = useState(false);
+    const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
@@ -38,7 +35,10 @@ function Signin() {
             if (userData.password === password) {
                 console.log('Login successful!');
                 setErrorMessage('');
-                setIsRegistered(true);
+
+                // Store username and role in local storage
+                localStorage.setItem('username', username);
+                localStorage.setItem('userRole', 'staff');
 
                 // Navigate to /staff after successful login
                 navigate('/staff');
@@ -57,21 +57,49 @@ function Signin() {
     };
 
     return (
-        <div className="container">
-            <form className="form" onSubmit={handleLogin}>
-                <h2>Placement Admin Login</h2>
-                <div className="form-group">
-                    <label htmlFor="username">Username</label>
-                    <input type="text" className="form-control" id="username" placeholder="Username" value={username} onChange={handleUsernameChange} />
+        <div className={'mainContainer'}>
+            <div className={'titleContainer'}>
+                <div>Placement Admin Login</div>
+            </div>
+            <br />
+            <div className={'inputContainer'}>
+                <label htmlFor="username">Username</label>
+                <input
+                    type="text"
+                    className={'inputBox'}
+                  
+                    id="username"
+                    placeholder="Enter your username here"
+                    value={username}
+                    onChange={handleUsernameChange}
+                />
+            </div>
+            <br />
+           
+            <div className={'inputContainer'}>
+                <label htmlFor="password">Password</label>
+                <input
+                    type="password"
+                    className={'inputBox'}
+                    id="password"
+                    placeholder="Enter your password here"
+                    value={password}
+                    onChange={handlePasswordChange}
+                />
+            </div>
+            <br />
+            <div className={'inputContainer'}>
+                <button type="submit" className={'btn btn-primary'} onClick={handleLogin}>
+                    Login
+                </button>
+            </div>
+            {errorMessage && (
+                <div className={'errorContainer'}>
+                    <label className={'errorLabel'}>{errorMessage}</label>
                 </div>
-                <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <input type="password" className="form-control" id="password" placeholder="Password" value={password} onChange={handlePasswordChange} />
-                </div>
-                <button type="submit" className="btn btn-primary">Login</button>
-            </form>
+            )}
         </div>
     );
 }
- 
-export default Signin
+
+export default Signin;

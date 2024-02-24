@@ -5,6 +5,7 @@ function sign() {
   return (
     <div className="sign">
       <div>
+        <h1>Login as</h1>
         <Link to="/staff/signin">
           <button>Admin</button>
         </Link>

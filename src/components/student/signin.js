@@ -18,26 +18,27 @@ function SignIn() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-    
+
         try {
             // Check if the rollnumber exists in the "Student" collection
             const studentData = await getStudentData(rollnumber);
-    
+
             if (!studentData) {
                 setErrorMessage('Rollnumber does not exist.');
                 return;
             }
-    
+
             // If rollnumber exists, check if the provided dob matches
             if (studentData.dob === dob) {
                 console.log('Login successful!');
                 setErrorMessage('');
-    
-                // Store rollnumber in local storage
+
+                // Store rollnumber and role in local storage
                 localStorage.setItem('rollnumber', rollnumber);
-    
-                // Navigate to /student after successful login, passing rollnumber as state
-                navigate('/student', { state: { rollnumber } });
+                localStorage.setItem('userRole', 'student');
+
+                // Navigate to /student after successful login
+                navigate('/student');
             } else {
                 setErrorMessage('Incorrect date of birth. Please try again.');
             }
@@ -46,7 +47,6 @@ function SignIn() {
             setErrorMessage('Error logging in. Please try again.');
         }
     };
-    
 
     const getStudentData = async (rollnumber) => {
         const studentDoc = await firebaseApp.firestore().collection('Student').doc(rollnumber).get();
@@ -54,16 +54,41 @@ function SignIn() {
     };
 
     return (
-        <div>
-            <form onSubmit={handleLogin}>
-                <h2>Student Login</h2>
-                <input type="text" placeholder='Roll Number' value={rollnumber} onChange={handleRollnumberChange} />
-                <input type="date" placeholder='Date of Birth' value={dob} onChange={handleDobChange} />
-                <button type="submit">Login</button>
-            </form>
-            {errorMessage && (
-                <p style={{ color: 'red' }}>{errorMessage}</p>
-            )}
+        <div className={'mainContainer'}>
+            <div className={'titleContainer'}>
+                <div>Login</div>
+            </div>
+            <br />
+            <div className={'inputContainer'}>
+                <input
+                    type="text"
+                    placeholder="Enter your roll number here"
+                    className={'inputBox'}
+                    value={rollnumber}
+                    onChange={handleRollnumberChange}
+                />
+                <label className="errorLabel">{errorMessage}</label>
+            </div>
+            <br />
+            <div className={'inputContainer'}>
+                <input
+                    type="date"
+                    placeholder="Enter your date of birth here"
+                    className={'inputBox'}
+                    value={dob}
+                    onChange={handleDobChange}
+                />
+                <label className="errorLabel">{errorMessage}</label>
+            </div>
+            <br />
+            <div className={'inputContainer'}>
+                <input
+                    type="button"
+                    className={'inputButton'}
+                    value={'Log in'}
+                    onClick={handleLogin}
+                />
+            </div>
         </div>
     );
 }

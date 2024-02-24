@@ -42,10 +42,17 @@ function Dashboard() {
       }
     };
     return (
-        <div className='sidenavbar'>
-            {students.map((student, index) => (
-                <h2>{student.name}</h2>
-            ))}
+       <div>
+         <div>
+            <div className='topnav'>
+                <h1>CDP</h1>
+                <div>
+                    <h2>Welcome <span >{students[0]?.name}
+                        </span></h2>
+                </div>
+            </div>
+        </div>
+        
             <div className="sidenav">
                 <Link to="/student/profile"><button>Profile</button></Link>
                 <Link to="/student/companies"><button>Companies</button></Link>
@@ -53,7 +60,7 @@ function Dashboard() {
                 <Link to="/student/review"><button>Review</button></Link>
                 <Link to="/signout"><button>Sign Out</button></Link>
             </div>
-        </div>
+       </div>
     )
 }
 

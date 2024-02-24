@@ -22,6 +22,24 @@ function Events() {
       console.error('Error fetching events:', error);
     }
   };
+
+  const handleDelete = async (companyName) => {
+    try {
+      const eventsCollection = firebaseApp.firestore().collection('Events');
+      const snapshot = await eventsCollection.where('companyname', '==', companyName).get();
+      snapshot.forEach(doc => {
+        doc.ref.delete();
+      });
+      alert(`Successfully deleted ${companyName}`);
+      // Fetch updated events data after deleting
+      fetchEvents();
+
+
+      console.log(`Successfully deleted ${companyName}`);
+    } catch (error) {
+      console.error('Error deleting event:', error);
+    }
+  };
  
   return (
     <div>
@@ -41,7 +59,7 @@ function Events() {
               <p>Batch : {event.batch}</p>
               <p>Branch : {event.branch}</p>
               <p>Drive Date: {event.date}</p>
-              <button onClick={() => navigate(`/apply/${event.companyname}`)}>Delete</button>
+              <button onClick={() => handleDelete(event.companyname)}>Delete</button>
             </div>
           ))}
         </div>

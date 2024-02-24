@@ -47,7 +47,7 @@ function Feedback() {
 
         // Fetch updated feedback data after posting
         fetchFeedback();
-
+        alert('Feedback posted successfully!');
         console.log('Feedback posted successfully!');
       } catch (error) {
         console.error('Error posting feedback:', error);
@@ -61,6 +61,7 @@ function Feedback() {
     try {
       // Delete the document with the specified ID from the "Feedback" collection
       await db.collection('Feedback').doc(id).delete();
+      alert('Feedback deleted successfully!');
       console.log('Feedback deleted successfully!');
       // Fetch updated feedback data after deletion
       fetchFeedback();
@@ -76,9 +77,9 @@ function Feedback() {
         <h1>Feedback</h1>
         <br/><br/>
         <div>
-          <label>Search Company : </label>
+          <label>Select a  Company : </label>
           <select value={selectedCompany} onChange={(e) => setSelectedCompany(e.target.value)}>
-            <option value="" disabled>Select a company</option>
+            <option value="" disabled></option>
             {events.map((event, index) => (
               <option key={index} value={event.companyname}>{event.companyname}</option>
             ))}

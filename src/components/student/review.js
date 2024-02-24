@@ -1,29 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './navbar';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { firebaseApp, db } from '../../firebase';
 
 function Feedback() {
-  const events = [
-    { companyName: 'Tata Consultancy Services', degree: 'BE', batch: '2020', branch: 'CSE', role: 'Web Developer', date: '20-02-2023', category:'Super Dream' },
-    { companyName: 'Infocys Private Limited', degree: 'B.Tech', batch: '2020', branch: 'CCE', role: 'Junior Software Trainee', date: '21-02-2023', category:'Dream Offer' },
-    { companyName: 'Tata Consultancy Services', degree: 'BE', batch: '2020', branch: 'CSE', role: 'Web Developer', date: '20-02-2023', category:'Super Dream' },
-    { companyName: 'Infocys Private Limited', degree: 'B.Tech', batch: '2020', branch: 'CCE', role: 'Software Trainee', date: '21-02-2023', category:'Dream Offer' },
-    { companyName: 'Tata Consultancy Services', degree: 'BE', batch: '2020', branch: 'CSE', role: 'Web Developer', date: '20-02-2023', category:'Super Dream' },
-  ];
-  const [setEvents] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [selectedCompany, setSelectedCompany] = useState('');
+  const [selectedCompanyDetails, setSelectedCompanyDetails] = useState(null);
+  const [feedbackData, setFeedbackData] = useState([]);
+
   useEffect(() => {
-    fetchEvents();
+  
+    fetchFeedback();
   }, []);
 
-  const fetchEvents = async () => {
+
+
+  const fetchFeedback = async () => {
     try {
-      const response = await fetch('/staff/api/events'); // Replace '/api/events' with your actual API endpoint
-      const data = await response.json();
-      setEvents(data);
+      const feedbackCollection = db.collection('Feedback');
+      const snapshot = await feedbackCollection.get();
+      const feedbackData = snapshot.docs.map(doc => doc.data());
+      setFeedbackData(feedbackData);
+      console.log('Feedback:', feedbackData);
     } catch (error) {
-      console.error('Error fetching events:', error);
+      console.error('Error fetching feedback:', error);
     }
   };
+
+
 
   return (
     <div>
@@ -31,17 +36,14 @@ function Feedback() {
       <div className='container'>
         <h1>Review</h1>
         <br/><br/>
+        
         <div className='upcomingevents'>
-          {events.map((event, index) => (
+  
+          {feedbackData.map((feedback, index) => (
             <div key={index} className='events_'>
-              <p>{event.companyName}</p>
-              <p>{event.role}, {event.category}</p>
-              <p>Degree : {event.degree}</p>
-              <p>Batch : {event.batch}</p>
-              <p>Branch : {event.branch}</p>
-              <p>Drive Date: {event.date}</p>
+              <p>Company Name: {feedback.companyname}</p>
+              <Link to={`/student/view/${feedback.companyname}`}><button>View</button></Link>
               
-              <Link to={{ pathname: `/apply/${index}` }}><button>Fill Out</button></Link>
             </div>
           ))}
         </div>

@@ -3,7 +3,7 @@ import Navbar from './navbar';
 import { Link } from 'react-router-dom';
 import { firebaseApp, db } from '../../firebase';
 
-function Feedback() {
+const Feedback = () => {
   const [feedbackData, setFeedbackData] = useState([]);
   const [registeredCompanies, setRegisteredCompanies] = useState([]);
 
@@ -31,13 +31,25 @@ function Feedback() {
   const fetchFeedback = async (registeredCompanies) => {
     try {
       const feedbackPromises = registeredCompanies.map(async (companyname) => {
-        const feedbackDoc = await db.collection('Feedback').doc(companyname).get();
-        return feedbackDoc.exists ? feedbackDoc.data() : null;
+        // Fetch details from the Events collection based on companyname
+        const eventDoc = await db.collection('Events').doc(companyname).get();
+        const eventData = eventDoc.exists ? eventDoc.data() : null;
+
+        return {
+          companyname: companyname,
+          role: eventData ? eventData.role : 'Role not available',
+          category: eventData ? eventData.category : 'Category not available',
+          degree: eventData ? eventData.degree : 'Degree not available',
+          batch: eventData ? eventData.batch : 'Batch not available',
+          branch: eventData ? eventData.branch : 'Branch not available',
+          date: eventData ? eventData.date : 'Date not available',
+        };
       });
 
       const feedbackResults = await Promise.all(feedbackPromises);
-      setFeedbackData(feedbackResults.filter(data => data !== null));
+      setFeedbackData(feedbackResults);
       console.log('Feedback:', feedbackResults);
+      
     } catch (error) {
       console.error('Error fetching feedback:', error);
     }

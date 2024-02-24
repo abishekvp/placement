@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "placement-app-6c1cf"
-  }
+    "default": "placementapp-123",
+    "n": "placementapp-123"
+  },
+  "targets": {},
+  "etags": {}
 }

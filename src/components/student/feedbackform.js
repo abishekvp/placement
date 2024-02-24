@@ -1,6 +1,9 @@
 import React, { useState , useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { db } from '../../firebase';
+import Navbar from './navbar';
+
+import { useNavigate } from 'react-router-dom';
 
 function FeedbackForm() {
   const { companyname, index } = useParams();
@@ -9,16 +12,14 @@ function FeedbackForm() {
     console.log('FeedbackForm component is rendered');
   }, []);
 
+  const navigate = useNavigate();
+
   const handlePostFeedback = async () => {
     try {
       // Update the feedback content in the "Feedback" collection
       const feedbackDocRef = db.collection('Feedback').doc(companyname);
-      await feedbackDocRef.set(
-        {
-          [`registered.${index}.feedbackContent`]: feedbackContent,
-        },
-        { merge: true }
-      );
+      
+     
 
       // Create a sub-collection "registeredstudents" and update the feedback content
       const registeredStudentsDocRef = feedbackDocRef.collection('registeredstudents').doc(localStorage.getItem('rollnumber'));
@@ -27,6 +28,8 @@ function FeedbackForm() {
       });
 
       alert('Feedback posted successfully!');
+      navigate('/student/feedback');
+
     } catch (error) {
       console.error('Error posting feedback:', error);
     }
@@ -34,6 +37,8 @@ function FeedbackForm() {
 
   return (
     <div>
+      <Navbar />
+      <div className='container'>
       <h2>Feedback for {companyname}</h2>
       <textarea
         value={feedbackContent}
@@ -42,6 +47,7 @@ function FeedbackForm() {
       ></textarea>
       <br />
       <button onClick={handlePostFeedback}>Post Feedback</button>
+      </div>
     </div>
   );
 }
