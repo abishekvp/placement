@@ -58,10 +58,12 @@ function Signin() {
 
     return (
         <div className={'mainContainer'}>
+             <div className={'signinContainer'}>
             <div className={'titleContainer'}>
-                <div>Placement Admin Login</div>
+                <div>Admin Login</div>
             </div>
             <br />
+            <hr/>
             <div className={'inputContainer'}>
                 <label htmlFor="username">Username</label>
                 <input
@@ -89,7 +91,7 @@ function Signin() {
             </div>
             <br />
             <div className={'inputContainer'}>
-                <button type="submit" className={'btn btn-primary'} onClick={handleLogin}>
+                <button type="submit" className={'loginButton'} onClick={handleLogin}>
                     Login
                 </button>
             </div>
@@ -98,6 +100,7 @@ function Signin() {
                     <label className={'errorLabel'}>{errorMessage}</label>
                 </div>
             )}
+            </div>
         </div>
     );
 }

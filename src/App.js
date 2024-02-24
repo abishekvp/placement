@@ -20,7 +20,8 @@ import Higherstudies from './components/staff/higherstudies';
 import StaffFeedback from './components/staff/feedback';
 import AddFeedback from './components/staff/feedback';
 import FeedbackForm from './components/student/feedbackform';
-import ViewResponse from './components/staff/viewresponse';
+import ViewResponseStaff from './components/staff/viewresponsestaff'; 
+import ViewResponseStudent from './components/student/viewresposestudent';
 
 import Profile from './components/student/profile';
 import Companies from './components/student/companies';
@@ -54,7 +55,7 @@ function App() {
           <Route path="/staff/placedstudents" element={<Placed />}></Route>
           <Route path="/staff/eligiblestudents" element={<Eligible />}></Route>
           <Route path="/staff/higherstudies" element={<Higherstudies />}></Route>
-          <Route path="/staff/view/:companyname" element={<ViewResponse />} />
+          <Route path="/staff/view/:companyname" element={<ViewResponseStaff />} />
 
           <Route path="/student" element={<Profile />}></Route>
           <Route path="/student/events" element={<Events />}></Route>
@@ -63,7 +64,7 @@ function App() {
           <Route path="/student/companies" element={<Companies />}></Route>
           <Route path="/student/review" element={<Review />}></Route>
           <Route path="/student/:companyname/:index/fillout" element={<FeedbackForm />} />
-          <Route path="/student/view/:companyname" element={<ViewResponse />} />
+          <Route path="/student/view/:companyname" element={<ViewResponseStudent />} />
          
 
          

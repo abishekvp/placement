@@ -61,7 +61,7 @@ const Registered = () => {
         <br />
         <h2>Registered Students</h2>
         <label>Filter by Company : </label>
-        <select value={selectedCompany} onChange={handleCompanyChange}>
+        <select  className={'inputBox'} value={selectedCompany} onChange={handleCompanyChange}>
           <option value="" disabled>Select a company</option>
           {companyNames.map((company, index) => (
             <option key={index} value={company}>{company}</option>

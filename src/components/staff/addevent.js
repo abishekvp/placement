@@ -41,7 +41,7 @@ function Addevent() {
         <section>
             <Navbar />
             <div className='container'>
-                <h1>Add Placement Drive</h1>
+                <h2>Add Placement Drive</h2>
                 <form onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor="companyname">Company Name : </label>

@@ -44,8 +44,8 @@ function Profile() {
         <div>
             <Navbar/>
             <div className='container'>
-                <h1>Student Profile</h1>
-                <div className='profile_data'>
+                <h2>Student Profile</h2>
+                <div className='events_'>
                     {students.map((student, index) => (
                     <div key={index}>
                         <p>Name : {student.name}</p>

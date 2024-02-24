@@ -103,7 +103,8 @@ function AddStudent() {
         <section>
             <Navbar/>
             <div className='container'>
-                <h1>Add Student</h1>
+                <h2>
+                    Add Student</h2>
                 <form onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor="name">Student Name : </label>

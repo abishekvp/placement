@@ -78,8 +78,8 @@ function Feedback() {
         <br/><br/>
         <div>
           <label>Select a  Company : </label>
-          <select value={selectedCompany} onChange={(e) => setSelectedCompany(e.target.value)}>
-            <option value="" disabled></option>
+          <select  className={'inputBox'} value={selectedCompany} onChange={(e) => setSelectedCompany(e.target.value)}>
+            <option value="" disabled> Select Company </option>
             {events.map((event, index) => (
               <option key={index} value={event.companyname}>{event.companyname}</option>
             ))}

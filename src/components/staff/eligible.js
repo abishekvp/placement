@@ -52,7 +52,7 @@ const Eligible = () => {
         <h2>Eligible Students</h2>
         <label>Filter by CGPA: </label>
       
-        <input type='number' step='0.01' max='10' value={cgpaFilter} onChange={handleCgpaChange} />
+        <input type='number'  className={'inputBox'}  step='0.01' max='10' value={cgpaFilter} onChange={handleCgpaChange} />
         <table>
           <thead>
             <tr>

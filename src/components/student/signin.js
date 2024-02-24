@@ -54,10 +54,15 @@ function SignIn() {
     };
 
     return (
-        <div className={'mainContainer'}>
+       
+            <div className={'mainContainer'}>
+                 <div className={'signinContainer'}>
             <div className={'titleContainer'}>
                 <div>Login</div>
             </div>
+            
+            <br />
+            <hr/>
             <br />
             <div className={'inputContainer'}>
                 <input
@@ -84,12 +89,14 @@ function SignIn() {
             <div className={'inputContainer'}>
                 <input
                     type="button"
-                    className={'inputButton'}
+                    className={'loginButton'}
                     value={'Log in'}
                     onClick={handleLogin}
                 />
             </div>
+            </div>
         </div>
+        
     );
 }
 
