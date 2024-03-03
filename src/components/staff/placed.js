@@ -38,6 +38,7 @@ const Placed = () => {
               <th>Batch</th>
               <th>Degree</th>
               <th>Branch</th>
+              <th>Offer Letter</th>
               <th>Phone</th>
               <th>Email</th>
             </tr>
@@ -50,6 +51,19 @@ const Placed = () => {
                 <td>{student.batch}</td>
                 <td>{student.degree}</td>
                 <td>{student.branch}</td>
+                <td>
+                  {student.offerLetter && student.offerLetter.length > 0 ? (
+                    student.offerLetter.map((offer, index) => (
+                      <span key={index}>
+                        <a href={offer} target="_blank" rel="noreferrer">View</a>
+                        {index < student.offerLetter.length - 1 && ', '}
+                      </span>
+                    ))
+                  ) : (
+                    'N/A'
+                  )}
+                </td>
+
                 <td>{student.phone}</td>
                 <td>{student.email}</td>
               </tr>

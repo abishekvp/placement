@@ -62,6 +62,7 @@ const Eligible = () => {
               <th>Batch</th>
               <th>Degree</th>
               <th>Branch</th>
+              <th>CGPA</th>
               <th>Phone</th>
               <th>Email</th>
             </tr>
@@ -74,6 +75,7 @@ const Eligible = () => {
                 <td>{student.batch}</td>
                 <td>{student.degree}</td>
                 <td>{student.branch}</td>
+                <td>{student.cgpa}</td>
                 <td>{student.phone}</td>
                 <td>{student.email}</td>
               </tr>

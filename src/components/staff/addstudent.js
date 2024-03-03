@@ -25,44 +25,13 @@ function AddStudent() {
         arrearCount: '',
     });
     const navigate = useNavigate();
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        setFormData({
-            ...formData,
-            resumeFile: file,
-        });
-    };
 
-    const handleFileUpload = async () => {
-        try {
-            const file = formData.resumeFile;
-            if (file) {
-                const storageRef = firebaseApp.storage().ref();
-                const fileRef = storageRef.child(`resumes/${formData.rollnumber}_${file.name}`);
-                await fileRef.put(file);
-                const downloadURL = await fileRef.getDownloadURL();
-
-                setFormData({
-                    ...formData,
-                    resumeDownloadLink: downloadURL,
-                });
-
-                console.log('File uploaded successfully!');
-                return downloadURL; // Return the download URL
-            }
-        } catch (error) {
-            console.error('Error uploading file:', error);
-            throw error; // Propagate the error
-        }
-    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
     
         try {
-            const resumeDownloadLink = await handleFileUpload();
-    
-            if (resumeDownloadLink) {
+          
                 const studentData = {
                     name: formData.name,
                     rollnumber: formData.rollnumber,
@@ -75,11 +44,11 @@ function AddStudent() {
                     phone: formData.phone,
                     degree: formData.degree,
                     placed: formData.placed,
-                    registered: formData.registered.split(',').map((company) => company.trim()),
-                    resume: resumeDownloadLink,
+                    registered: [],
+                    resume: '', 
                     higherstudies: formData.higherstudies,
                     arrearCount: formData.arrearCount,
-                };
+                }
 
                 // Send a POST request to your server with the studentData
                 await axios.post('https://placementportal.vercel.app/students/add', studentData);
@@ -87,9 +56,7 @@ function AddStudent() {
                 alert('Student added successfully!');
                 navigate('/staff/students');
                 console.log('Data uploaded successfully!');
-            } else {
-                console.error('Error uploading resume file.');
-            }
+            
         } catch (error) {
             console.error('Error uploading data:', error);
         }
@@ -168,13 +135,7 @@ function AddStudent() {
                             <option value="No">No</option>
                         </select>
                     </div>
-                    {/* <div>
-                        <label htmlFor="resume">Resume : </label>
-                        <input type='file' id='resume' name='resume' onChange={handleFileChange} required/>
-                    </div>
-                    <button type="button" onClick={handleFileUpload}>
-                        Upload Resume
-                    </button> */}
+                
                     <input className="" type='submit' value="Submit" />
                 </form>
             </div>
