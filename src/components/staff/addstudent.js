@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { firebaseApp } from '../../firebase';
+import axios from 'axios';
 import Navbar from './navbar';
 import { useNavigate } from 'react-router-dom';
 
@@ -62,11 +63,7 @@ function AddStudent() {
             const resumeDownloadLink = await handleFileUpload();
     
             if (resumeDownloadLink) {
-                const rollNumber = formData.rollnumber;
-                const studentRef = firebaseApp.firestore().collection('Student').doc(rollNumber);
-                const registeredArray = formData.registered.split(',').map((company) => company.trim());
-                // Upload data to Firestore
-                await studentRef.set({
+                const studentData = {
                     name: formData.name,
                     rollnumber: formData.rollnumber,
                     email: formData.email,
@@ -78,11 +75,15 @@ function AddStudent() {
                     phone: formData.phone,
                     degree: formData.degree,
                     placed: formData.placed,
-                    registered: registeredArray,
+                    registered: formData.registered.split(',').map((company) => company.trim()),
                     resume: resumeDownloadLink,
                     higherstudies: formData.higherstudies,
                     arrearCount: formData.arrearCount,
-                });
+                };
+
+                // Send a POST request to your server with the studentData
+                await axios.post('https://placementportal.vercel.app/students/add', studentData);
+                
                 alert('Student added successfully!');
                 navigate('/staff/students');
                 console.log('Data uploaded successfully!');
@@ -150,20 +151,7 @@ function AddStudent() {
                         <label htmlFor="degree">Degree : </label>
                         <input type='text' className= "inputBox" id='degree' name='degree' placeholder='Degree' onChange={handleChange} value={formData.degree} required/>
                     </div>
-                    <div>
-                        <label htmlFor="registered">Registered Companies: </label>
-                        <input
-                        style={{width: '50%'}}
-                            type='text'
-                            id='registered'
-                            name='registered'
-                            placeholder='Separate multiple companies with commas (e.g., Company1, Company2).'
-                            onChange={handleChange}
-                            value={formData.registered}
-                            className= "inputBox"
-                        />
-                    
-                    </div>
+                   
                     <div>
                         <label htmlFor="higherstudies">Higher Studies: </label>
                         <select className= "inputBox" id="higherstudies" name="higherstudies" onChange={handleChange} value={formData.higherstudies} required>
@@ -180,14 +168,14 @@ function AddStudent() {
                             <option value="No">No</option>
                         </select>
                     </div>
-                    <div>
+                    {/* <div>
                         <label htmlFor="resume">Resume : </label>
                         <input type='file' id='resume' name='resume' onChange={handleFileChange} required/>
                     </div>
                     <button type="button" onClick={handleFileUpload}>
                         Upload Resume
-                    </button>
-                    <input type='submit' value="Submit" />
+                    </button> */}
+                    <input className="" type='submit' value="Submit" />
                 </form>
             </div>
         </section>

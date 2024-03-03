@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Navbar from './navbar';
+import  axios  from 'axios';
 import { firebaseApp } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,17 +20,13 @@ function Addevent() {
         event.preventDefault();
 
         try {
-            const eventRef = firebaseApp.firestore().collection('Events').doc(formData.companyname);
+            // Make a POST request to your server endpoint
+            await axios.post('https://placementportal.vercel.app/events/add', formData);
 
-            // Add the event data to Firestore with a new document ID based on the companyname
-            await eventRef.set({
-                ...formData,
-            });
-            
             alert('Event added successfully!');
             navigate('/staff/events');
         } catch (error) {
-            alert('Error adding event:', error);
+            alert('Error adding event:', error.message);
         }
     };
 

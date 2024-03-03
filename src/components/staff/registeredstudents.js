@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './navbar';
+import axios from 'axios';
 import Studentsnav from './studentsnav';
 import { db } from '../../firebase';
 
@@ -16,9 +17,10 @@ const Registered = () => {
 
   const fetchRegisteredStudents = async () => {
     try {
-      // Fetch students from the "Student" collection where the registered field is not empty
-      const studentsSnapshot = await db.collection('Student').where('registered', '!=', []).get();
-      const studentsData = studentsSnapshot.docs.map(doc => doc.data());
+      // Fetch students where the registered field is not empty
+      const response = await axios.get('https://placementportal.vercel.app/students');
+      const studentsData = response.data.filter(student => student.registered.length > 0);
+
       setRegisteredStudents(studentsData);
     } catch (error) {
       console.error('Error fetching registered students:', error);
@@ -27,11 +29,12 @@ const Registered = () => {
 
   const fetchCompanyNames = async () => {
     try {
-      // Fetch unique company names from the "Events" collection
-      const eventsSnapshot = await db.collection('Events').get();
-      const eventsData = eventsSnapshot.docs.map(doc => doc.data());
-      const uniqueCompanyNames = Array.from(new Set(eventsData.map(event => event.companyname)));
+      // Fetch unique company names from the event in mongodb
+      const response = await axios .get('https://placementportal.vercel.app/events');
+      const eventsData = response.data;
+      const uniqueCompanyNames = [...new Set(eventsData.map(event => event.companyname))];
       setCompanyNames(uniqueCompanyNames);
+     
     } catch (error) {
       console.error('Error fetching company names:', error);
     }
@@ -83,7 +86,7 @@ const Registered = () => {
             {filteredStudents.map((student, index) => (
               <tr key={index}>
                 <td>{student.name}</td>
-                <td>{student.rollNumber}</td>
+                <td>{student.rollnumber}</td>
                 <td>{student.batch}</td>
                 <td>{student.degree}</td>
                 <td>{student.branch}</td>

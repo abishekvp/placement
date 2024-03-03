@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './navbar';
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { firebaseApp } from '../../firebase'; // Import your Firebase configuration
+import axios from 'axios'; // Import Axios for making HTTP requests
 
 function Events() {
   const [events, setEvents] = useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetchEvents();
@@ -14,10 +12,8 @@ function Events() {
 
   const fetchEvents = async () => {
     try {
-      const eventsCollection = firebaseApp.firestore().collection('Events');
-      const snapshot = await eventsCollection.get();
-      const eventData = snapshot.docs.map(doc => doc.data());
-      setEvents(eventData);
+      const response = await axios.get('https://placementportal.vercel.app/events');
+      setEvents(response.data);
     } catch (error) {
       console.error('Error fetching events:', error);
     }
@@ -25,17 +21,10 @@ function Events() {
 
   const handleDelete = async (companyName) => {
     try {
-      const eventsCollection = firebaseApp.firestore().collection('Events');
-      const snapshot = await eventsCollection.where('companyname', '==', companyName).get();
-      snapshot.forEach(doc => {
-        doc.ref.delete();
-      });
+      await axios.delete(`https://placementportal.vercel.app/events/${companyName}`);
       alert(`Successfully deleted ${companyName}`);
       // Fetch updated events data after deleting
       fetchEvents();
-
-
-      console.log(`Successfully deleted ${companyName}`);
     } catch (error) {
       console.error('Error deleting event:', error);
     }

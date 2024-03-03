@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './navbar';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { firebaseApp, db } from '../../firebase';
 
@@ -16,13 +17,19 @@ const Feedback = () => {
 
   const fetchRegisteredCompanies = async (rollnumber) => {
     try {
-      const studentDoc = await db.collection('Student').doc(rollnumber).get();
-      const studentData = studentDoc.exists ? studentDoc.data() : null;
+      const response = await axios.get('https://placementportal.vercel.app/students');
+      const students = response.data;
+      const studentData = students.find((student) => student.rollnumber === rollnumber);
 
-      if (studentData && studentData.registered) {
+
+    
+      if (studentData) {
         setRegisteredCompanies(studentData.registered);
         fetchFeedback(studentData.registered);
+        
       }
+     
+   
     } catch (error) {
       console.error('Error fetching registered companies:', error);
     }
@@ -32,8 +39,10 @@ const Feedback = () => {
     try {
       const feedbackPromises = registeredCompanies.map(async (companyname) => {
         // Fetch details from the Events collection based on companyname
-        const eventDoc = await db.collection('Events').doc(companyname).get();
-        const eventData = eventDoc.exists ? eventDoc.data() : null;
+        const respone = await axios.get('https://placementportal.vercel.app/events');
+     
+        const eventData = respone.data.find((event) => event.companyname === companyname);
+
 
         return {
           companyname: companyname,

@@ -21,6 +21,7 @@ function Feedback() {
       const feedbackCollection = db.collection('Feedback');
       const snapshot = await feedbackCollection.get();
       const feedbackData = snapshot.docs.map(doc => doc.data());
+      console.log('Feedback:', feedbackData);
       setFeedbackData(feedbackData);
       console.log('Feedback:', feedbackData);
     } catch (error) {

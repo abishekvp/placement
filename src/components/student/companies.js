@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './navbar';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { firebaseApp, db } from '../../firebase';
 
@@ -13,10 +14,8 @@ function Companies() {
 
   const fetchEvents = async () => {
     try {
-      const eventsCollection = db.collection('Events');
-      const snapshot = await eventsCollection.get();
-      const eventData = snapshot.docs.map(doc => doc.data());
-      setEvents(eventData);
+      const response = await axios.get('https://placementportal.vercel.app/events');
+      setEvents(response.data);
     } catch (error) {
       console.error('Error fetching events:', error);
     }
@@ -24,38 +23,33 @@ function Companies() {
 
   const handleApply = async (companyName) => {
     try {
-      // Get the rollnumber from local storage
-      const rollnumber = localStorage.getItem('rollnumber');
-  
-      // Update the Student collection with the applied company
-      const studentRef = db.collection('Student').doc(rollnumber);
-  
-      // Use a transaction to ensure data consistency
-      await db.runTransaction(async (transaction) => {
-        const studentData = await transaction.get(studentRef);
-  
-        // Check if 'registered' field exists and initialize if it doesn't
-        const registeredCompanies = studentData.data()?.registered || [];
-  
-        // Check if the company is already in the 'registered' array
-        if (!registeredCompanies.includes(companyName)) {
-          // If not, add the company to the array
-          registeredCompanies.push(companyName);
-  
-          // Update the 'registered' field in the Firestore document
-          transaction.update(studentRef, { registered: registeredCompanies });
-  
-          alert('Successfully applied for ' + companyName);
-          console.log(`Successfully applied for ${companyName}`);
-        } else {
-          // If the company is already in the array, show a message
-          alert(`You have already applied for ${companyName}`);
+        const rollnumber = localStorage.getItem('rollnumber');
+        console.log('Rollnumber:', rollnumber);
+        console.log('Company:', companyName);
+
+        const response = await axios.post('https://placementportal.vercel.app/apply', {
+            rollnumber: rollnumber,
+            companyName: companyName,
+        });
+
+   
+
+        if (response.status === 200) {
+            alert(`Successfully applied for ${companyName}`);
+            console.log(`Successfully applied for ${companyName}`);
+        } else if (response.status === 201) {
+            alert(`Already applied for ${companyName}`);
+            console.log(`Already applied for ${companyName}`);
+        } else if (response.status === 400) {
+            alert(`Error applying for ${companyName}: ${response.data.message}`);
+            console.error(`Error applying for ${companyName}:`, response.data.message);
         }
-      });
     } catch (error) {
-      console.error('Error applying for company:', error);
+        console.error('Error applying for company:', error);
     }
-  };
+};
+
+
   
 
   return (

@@ -1,60 +1,42 @@
 import React, { useState } from 'react';
-import { firebaseApp } from '../../firebase';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function Signin() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
-    const navigate = useNavigate();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
-    const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
-    };
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
 
-    const handleUsernameChange = (e) => {
-        setUsername(e.target.value);
-    };
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
+  const handleLogin = async (e) => {
+    e.preventDefault();
 
-        try {
-            // Check if the username exists
-            const usernameExists = await checkUsernameExists(username);
+    try {
+      const response = await axios.post('https://placementportal.vercel.app/login', {
+        username,
+        password,
+      });
 
-            if (!usernameExists) {
-                setErrorMessage('Username does not exist.');
-                return;
-            }
-
-            // If username exists, check if the password matches
-            const userDoc = await firebaseApp.firestore().collection('Login').doc(username).get();
-            const userData = userDoc.data();
-
-            if (userData.password === password) {
-                console.log('Login successful!');
-                setErrorMessage('');
-
-                // Store username and role in local storage
-                localStorage.setItem('username', username);
-                localStorage.setItem('userRole', 'staff');
-
-                // Navigate to /staff after successful login
-                navigate('/staff');
-            } else {
-                setErrorMessage('Incorrect password. Please try again.');
-            }
-        } catch (error) {
-            console.error('Error logging in:', error);
-            setErrorMessage('Error logging in. Please try again.');
-        }
-    };
-
-    const checkUsernameExists = async (username) => {
-        const userDoc = await firebaseApp.firestore().collection('Login').doc(username).get();
-        return userDoc.exists;
-    };
+      if (response.data.success) {
+        setErrorMessage('');
+        localStorage.setItem('username', username);
+        navigate('/staff');
+      } else {
+        setErrorMessage(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error logging in:', error);
+      setErrorMessage('Error logging in. Please try again.');
+    }
+  };
 
     return (
         <div className={'mainContainer'}>

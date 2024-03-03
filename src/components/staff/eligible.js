@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './navbar';
+import axios from 'axios';
 import Studentsnav from './studentsnav';
 import { firebaseApp } from '../../firebase';
 
@@ -11,13 +12,13 @@ const Eligible = () => {
     // Fetch eligible students from Firestore
     const fetchEligibleStudents = async () => {
       try {
-        const querySnapshot = await firebaseApp.firestore().collection('Student').get();
-        const students = querySnapshot.docs.map(doc => {
-          const studentData = doc.data();
+        const response = await axios.get('https://placementportal.vercel.app/students');
+        const students = response.data;
           // Convert arrearCount and cgpa to numbers
-          const arrearCount = parseFloat(studentData.arrearCount);
-          const cgpa = parseFloat(studentData.cgpa);
-          return { ...studentData, arrearCount, cgpa };
+          students.forEach(student => {
+            student.arrearCount = parseInt(student.arrearCount);
+            student.cgpa = parseFloat(student.cgpa);
+
         });
 
         // Filter students based on the condition

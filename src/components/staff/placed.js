@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './navbar';
+import axios from 'axios';
 import Studentsnav from './studentsnav';
 import { firebaseApp } from '../../firebase';
 
@@ -10,9 +11,10 @@ const Placed = () => {
     // Fetch placed students from Firestore
     const fetchPlacedStudents = async () => {
       try {
-        const querySnapshot = await firebaseApp.firestore().collection('Student').where('placed', '==', 'Yes').get();
-        const students = querySnapshot.docs.map(doc => doc.data());
-        setPlacedStudents(students);
+        const response = await axios.get('https://placementportal.vercel.app/students');
+        const students = response.data;
+        setPlacedStudents(students.filter(student => student.placed === 'Yes'));
+
       } catch (error) {
         console.error('Error fetching placed students:', error);
       }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { firebaseApp } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 
@@ -49,8 +50,12 @@ function SignIn() {
     };
 
     const getStudentData = async (rollnumber) => {
-        const studentDoc = await firebaseApp.firestore().collection('Student').doc(rollnumber).get();
-        return studentDoc.exists ? studentDoc.data() : null;
+        // check if rollnumber exists in the in /students route in rollnumber field
+        const response = await axios.get('https://placementportal.vercel.app/students');
+        const studentData = response.data.find((student) => student.rollnumber === rollnumber);
+        console.log('Student data:', studentData);
+        return studentData;
+
     };
 
     return (

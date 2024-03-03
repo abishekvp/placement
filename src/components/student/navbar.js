@@ -8,7 +8,7 @@ function Dashboard() {
 
     useEffect(() => {
         const storedRollnumber = localStorage.getItem('rollnumber');
-        console.log('Stored Rollnumber:', storedRollnumber);
+      
         if (storedRollnumber) {
             fetchStudentProfile(storedRollnumber);
         }
@@ -18,7 +18,7 @@ function Dashboard() {
         try {
             const studentData = await getStudentData(rollnumber);
             setStudents([studentData]);
-            console.log('Student Profile:', studentData);
+         
         } catch (error) {
             console.error('Error fetching student profile:', error);
         }
@@ -30,7 +30,7 @@ function Dashboard() {
   
           if (studentDoc.exists) {
               const studentData = studentDoc.data();
-              console.log('Student data:', studentData);
+            
               return studentData;
           } else {
               console.log('Student not found in Firestore.');

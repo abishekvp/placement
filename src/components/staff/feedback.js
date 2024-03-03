@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './navbar';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { firebaseApp, db } from '../../firebase';
 
@@ -16,9 +17,8 @@ function Feedback() {
 
   const fetchEvents = async () => {
     try {
-      const eventsCollection = db.collection('Events');
-      const snapshot = await eventsCollection.get();
-      const eventData = snapshot.docs.map(doc => doc.data());
+      const response = await axios.get('https://placementportal.vercel.app/events');
+      const eventData = response.data;
       setEvents(eventData);
     } catch (error) {
       console.error('Error fetching events:', error);

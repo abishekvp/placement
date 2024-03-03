@@ -18,6 +18,11 @@ function FeedbackForm() {
     try {
       // Update the feedback content in the "Feedback" collection
       const feedbackDocRef = db.collection('Feedback').doc(companyname);
+
+      //add companyname field to the feedback document
+      await feedbackDocRef.set({
+        companyname: companyname,
+      });
       
      
 

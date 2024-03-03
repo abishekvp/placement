@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './navbar';
+import axios from 'axios';
 import Studentsnav from './studentsnav';
 import { firebaseApp } from '../../firebase';
 const Higherstudies = () => {
@@ -9,18 +10,17 @@ const Higherstudies = () => {
     // Function to fetch data from Firestore
     const fetchData = async () => {
       try {
-        const studentRef = firebaseApp.firestore().collection('Student');
+        const response = await axios.get('https://placementportal.vercel.app/students');
+        const students = response.data;
 
-        // Query to get students with higherstudies field equal to 'Yes'
-        const querySnapshot = await studentRef.where('higherstudies', '==', 'Yes').get();
+        // get students with higherstudies field equal to 'Yes'
+        const higherStudiesStudents = students.filter(
+          (student) => student.higherstudies === 'Yes'
+        );
+        
+        setHigherStudiesStudents(higherStudiesStudents);
 
-        // Extracting data from querySnapshot and updating state
-        const studentsData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setHigherStudiesStudents(studentsData);
-        console.log('studentsData:', studentsData); // For debugging
+        console.log('studentsData:', higherStudiesStudents);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
