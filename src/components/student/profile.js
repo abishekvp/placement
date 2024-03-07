@@ -32,7 +32,7 @@ function Profile() {
             const response = await axios.get('https://placementportal.vercel.app/students');
             const students = response.data;
             const studentData = students.find((student) => student.rollnumber === rollnumber);
-            console.log('Student data:', studentData);
+          
             return studentData;
         } catch (error) {
             console.error('Error fetching student data from Firestore:', error);

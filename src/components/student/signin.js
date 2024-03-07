@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import moment from 'moment';
 import { firebaseApp } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 
@@ -21,6 +22,8 @@ function SignIn() {
         e.preventDefault();
 
         try {
+            const formattedDob = moment(dob, 'DD-MM-YYYY').format('YYYY-MM-DD');
+
             // Check if the email exists in the "Student" collection
             const studentData = await getStudentData(email);
 
@@ -30,7 +33,7 @@ function SignIn() {
             }
 
             // If email exists, check if the provided dob matches
-            if (studentData.dob === dob) {
+            if (studentData.dob === formattedDob) {
                 console.log('Login successful!');
                 setErrorMessage('');
 
@@ -54,7 +57,7 @@ function SignIn() {
         // Check if email exists in the /students route in the email field
         const response = await axios.get('https://placementportal.vercel.app/students');
         const studentData = response.data.find((student) => student.email === email);
-        console.log('Student data:', studentData);
+     
         return studentData;
     };
 
@@ -81,8 +84,8 @@ function SignIn() {
                 <br />
                 <div className={'inputContainer'}>
                     <input
-                        type="date"
-                        placeholder="Enter your date of birth here"
+                        type="text"
+                        placeholder="Enter your date of birth (dd-mm-yyyy)"
                         className={'inputBox'}
                         value={dob}
                         onChange={handleDobChange}
